@@ -1,0 +1,1 @@
+This is a memory testing toolset designed for AMD Zen2 and later machines. Workloads can be generated using DB_workload_test, and their behavior can be examined with AMD_IBS_Reader. For further behavioral analysis, one can use Function_Address_Lookup to locate function addresses and then apply tools such as kprobe for observation.
