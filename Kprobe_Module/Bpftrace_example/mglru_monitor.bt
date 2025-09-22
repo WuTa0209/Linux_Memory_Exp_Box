@@ -1,0 +1,32 @@
+#!/usr/bin/env bpftrace
+BEGIN 
+{
+    printf("Trace try_to_shrink_lruvec function\n");
+    printf("Press Ctrl+C to stop\n");
+}
+
+kprobe:try_to_shrink_lruvec
+{
+    $lruvec = (struct lruvec *)arg0;
+    
+    if ($lruvec == 0) {
+        printf("[Warning]: lruvec is NULL\n");
+        return;
+    }
+
+    printf("[KPROBE] try_to_shrink_lruvec been called\n");
+    printf("[KPROBE] lruvec address: %px\n", $lruvec);
+    printf("[KPROBE] timestramp: %lu\n", nsecs);
+    printf("[KPROBE] process PID: %d, process_name: %s\n", pid, comm);
+    printf("[KPROBE] max_seq: %lu\n", $lruvec->lrugen.max_seq);    
+    printf("[KPROBE] call_count: %d\n", ++@call_count);
+    printf("---\n");
+}
+
+END
+{
+    printf("total call_count: %d\n", @call_count);
+    printf("End\n");
+}
+
+
